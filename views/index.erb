@@ -67,8 +67,8 @@
             </div>
           </header>
           <div class="slds-card__body slds-text-align--center">
-            <% @latest_screenshots.each do |screenshot| %>
-              <img src="/<%= screenshot %>" width="420" />
+            <% @devices.each do |device| %>
+              <%= device.device_name %> - <%= device.host %>
             <% end %>
           </div>
           <div class="slds-card__footer">&nbsp;</div>
