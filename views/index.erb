@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Dashboards</title>
+    <link rel="stylesheet" type="text/css" href="/assets/styles/salesforce-lightning-design-system.css" />
+  </head>
+  <body>
+
+    <div class="slds-grid slds-wrap">
+      <nav class="slds-col slds-size--1-of-1">
+        <div class="slds-page-header" role="banner">
+          <div class="slds-media slds-media--center">
+            <div class="slds-media__figure">
+              <svg aria-hidden="true" class="slds-icon slds-icon-standard-apps-admin">
+                <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#apps_admin"></use>
+              </svg>
+            </div>
+            <div class="slds-media__body">
+              <p class="slds-page-header__title slds-truncate slds-align-middle" title="Dashboards">Dashboards</p>
+              <p class="slds-text-body--small page-header__info">Showing <%= @urls_count %> urls</p>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <nav class="slds-col slds-size--1-of-1 slds-m-around--large">
+        <article class="slds-card">
+          <header class="slds-card__header slds-grid">
+            <div class="slds-media slds-media--center slds-has-flexi-truncate">
+              <div class="slds-media__figure">
+                <svg aria-hidden="true" class="slds-icon slds-icon-standard-apps slds-icon--small">
+                  <use xlink:href="/assets/icons/standard-sprite/svg/symbols.svg#apps"></use>
+                </svg>
+              </div>
+              <div class="slds-media__body slds-truncate">
+                <h2>
+                  <span class="slds-text-heading--small">Screenshots</span>
+                </h2>
+              </div>
+            </div>
+          </header>
+          <div class="slds-card__body slds-text-align--center">
+            <% @latest_screenshots.each do |screenshot| %>
+              <img src="/<%= screenshot %>" width="420" />
+            <% end %>
+          </div>
+          <div class="slds-card__footer">&nbsp;</div>
+        </article>
+      </nav>
+
+      <nav class="slds-col slds-size--1-of-1 slds-m-around--large">
+        <article class="slds-card">
+          <header class="slds-card__header slds-grid">
+            <div class="slds-media slds-media--center slds-has-flexi-truncate">
+              <div class="slds-media__figure">
+                <svg aria-hidden="true" class="slds-icon slds-icon-custom-custom21 slds-icon--small">
+                  <use xlink:href="/assets/icons/custom-sprite/svg/symbols.svg#custom21"></use>
+                </svg>
+              </div>
+              <div class="slds-media__body slds-truncate">
+                <h2>
+                  <span class="slds-text-heading--small">Screens</span>
+                </h2>
+              </div>
+            </div>
+          </header>
+          <div class="slds-card__body slds-text-align--center">
+            <% @latest_screenshots.each do |screenshot| %>
+              <img src="/<%= screenshot %>" width="420" />
+            <% end %>
+          </div>
+          <div class="slds-card__footer">&nbsp;</div>
+        </article>
+      </nav>
+    </div>
+  </body>
+</html>
