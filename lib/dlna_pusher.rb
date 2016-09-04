@@ -2,7 +2,7 @@ require 'easy_upnp'
 
 class DlnaPusher
   attr_reader :devices
-  SEARCH_INTERVAL = 10
+  SEARCH_INTERVAL = 5
   UPDATE_SCREEN_INTERVAL = 60
 
   def initialize(host_path:, image_path_prefixes:)
@@ -17,8 +17,13 @@ class DlnaPusher
       searcher = EasyUpnp::SsdpSearcher.new
       while true
         devices_found = searcher.search("urn:schemas-upnp-org:service:AVTransport:3")
-        @devices_lock.synchronize do
-          @devices = devices_found.dup
+        unless @devices.map(&:host).sort == devices_found.map(&:host).sort
+          @devices_lock.synchronize do
+            @devices = devices_found.dup
+          end
+          # give the TV some time to boot
+          sleep 10
+          push_next_image
         end
         sleep SEARCH_INTERVAL
       end
@@ -28,11 +33,7 @@ class DlnaPusher
   def start_pushing
     Thread.new do
       while true
-        next_image_path = @image_path_prefixes.rotate!.first
-        latest_filename = Dir.glob("#{next_image_path}*").max_by do |filename|
-          File.mtime(filename)
-        end
-        push_image_to_all_devices(latest_filename)
+        push_next_image
         sleep UPDATE_SCREEN_INTERVAL
       end
     end
@@ -65,5 +66,13 @@ class DlnaPusher
         end
       end
     end
+  end
+
+  def push_next_image
+    next_image_path = @image_path_prefixes.rotate!.first
+    latest_filename = Dir.glob("#{next_image_path}*").max_by do |filename|
+      File.mtime(filename)
+    end
+    push_image_to_all_devices(latest_filename)
   end
 end
