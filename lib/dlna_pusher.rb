@@ -2,7 +2,7 @@ require 'easy_upnp'
 
 class DlnaPusher
   attr_reader :devices
-  SEARCH_INTERVAL = 5 * 60
+  SEARCH_INTERVAL = 10
   UPDATE_SCREEN_INTERVAL = 60
 
   def initialize(host_path:, image_path_prefixes:)
@@ -48,7 +48,8 @@ class DlnaPusher
       @devices.each do |device|
         begin
           service = device.service("urn:schemas-upnp-org:service:AVTransport:3")
-          service.Stop(InstanceID: 0) if service.GetCurrentTransportActions(InstanceID: 0)[:Actions].include?('Stop')
+          allowed_actions = service.GetCurrentTransportActions(InstanceID: 0)[:Actions]
+          service.Stop(InstanceID: 0) if allowed_actions && allowed_actions.include?('Stop')
           sleep 0.1
           service.SetAVTransportURI(InstanceID: 0, CurrentURI: uri, CurrentURIMetaData: metadata)
           service.Play(InstanceID: 0, Speed: 1)
@@ -59,6 +60,8 @@ class DlnaPusher
           else
             raise "#{error_hash}"
           end
+        rescue StandardError => e
+          puts e
         end
       end
     end
