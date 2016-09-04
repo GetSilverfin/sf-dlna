@@ -28,6 +28,10 @@ class ScreenshotRefresher
     end
   end
 
+  def file_path_prefixes
+    @urls.keys.map { |url| "#{@directory}/#{file_prefix_for_url(url)}" }
+  end
+
   private
 
   def take_screenshot(url, path:, zoom_factor: 1, width: 3840, height: 2160)
