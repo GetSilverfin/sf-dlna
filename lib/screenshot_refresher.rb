@@ -1,7 +1,7 @@
 class ScreenshotRefresher
   SCRIPT = File.expand_path('../capture_screenshot.js', __FILE__)
 
-  def initialize(urls, interval: 120, directory: 'screenshots', format: 'jpg')
+  def initialize(urls, directory:, interval: 120, format: 'jpg')
     @urls = urls
     @interval = interval
     @directory = directory
@@ -21,6 +21,14 @@ class ScreenshotRefresher
       end
     end
   end
+
+  def most_recent_screenshot_for(url)
+    Dir.glob("#{@directory}/#{file_prefix_for_url(url)}*#{@format}").max_by do |filename|
+      File.mtime(filename)
+    end
+  end
+
+  private
 
   def take_screenshot(url, path:, zoom_factor: 1, width: 3840, height: 2160)
     `phantomjs --ssl-protocol=any #{SCRIPT} #{url} #{path} #{width} #{height} #{zoom_factor}`
