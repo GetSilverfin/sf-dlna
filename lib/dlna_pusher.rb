@@ -73,6 +73,6 @@ class DlnaPusher
     latest_filename = Dir.glob("#{next_image_path}*").max_by do |filename|
       File.mtime(filename)
     end
-    push_image_to_all_devices(latest_filename)
+    push_image_to_all_devices(latest_filename) if latest_filename
   end
 end
